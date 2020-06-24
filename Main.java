@@ -8,73 +8,94 @@ public class Main {
     private static int characterCount;
     private static int syllableCount;
     private static int polysyllableCount;
+    private static int averageAge;
+
+    private static int findAge(double score) {
+        switch((int) Math.round(score)) {
+            case 1:
+                return 6;                
+            case 2:
+                return 7;
+            case 3:
+                return 9;
+            case 4:
+                return 10;
+            case 5:
+                return 11;
+            case 6:
+                return 12;
+            case 7:
+                return 13;
+            case 8:
+                return 14;
+            case 9:
+                return 15;
+            case 10:
+                return 16;
+            case 11:
+                return 17;
+            case 12:
+                return 18;
+            case 13:
+                return 24;
+            default:
+                return 25; // 24+
+        }
+    }
+
+    private static void colemanLiauIndex() {
+        double score = 0.0588 * (1.0 * characterCount / wordCount * 100) - 0.296 * (1.0 * sentenceCount / wordCount * 100) - 15.8;
+    
+        int age = findAge(score);
+
+        averageAge += age;
+
+        if (age == 25) {
+            System.out.printf("Coleman–Liau index: %f (about 24+ year olds).%n", score);
+        } else {
+            System.out.printf("Coleman–Liau index: %f (about %d year olds).%n", score, age);
+        }
+    }
+
+    private static void smogIndex() {
+        double score = 1.043 * Math.sqrt(polysyllableCount * 30 / sentenceCount) + 3.1291;
+    
+        int age = findAge(score);
+
+        averageAge += age;
+
+        if (age == 25) {
+            System.out.printf("Simple Measure of Gobbledygook: %f (about 24+ year olds).%n", score);
+        } else {
+            System.out.printf("Simple Measure of Gobbledygook: %f (about %d year olds).%n", score, age);
+        }
+    }
         
-    private static void readabilityIndex() {
+    private static void fleschKincaidIndex() {
+        double score = 0.39 * wordCount / sentenceCount + 11.8 * syllableCount / wordCount - 15.59;
+    
+        int age = findAge(score);
+
+        averageAge += age;
+
+        if (age == 25) {
+            System.out.printf("Flesch–Kincaid readability tests: %f (about 24+ year olds).%n", score);
+        } else {
+            System.out.printf("Flesch–Kincaid readability tests: %f (about %d year olds).%n", score, age);
+        }
+    }
+
+    private static void automatedReadabilityIndex() {
         double score = 4.71 * characterCount / wordCount + 0.5 * wordCount / sentenceCount - 21.43;
     
-        System.out.println("The score is: " + score);
-        
-        
-    /*  Automated readability index
-        Score	Age	Grade Level
-        1	5-6	Kindergarten
-        2	6-7	First/Second Grade
-        3	7-9	Third Grade
-        4	9-10	Fourth Grade
-        5	10-11	Fifth Grade
-        6	11-12	Sixth Grade
-        7	12-13	Seventh Grade
-        8	13-14	Eighth Grade
-        9	14-15	Ninth Grade
-        10	15-16	Tenth Grade
-        11	16-17	Eleventh Grade
-        12	17-18	Twelfth grade
-        13	18-24	College student
-        14	24+	Professor
-    */
-        switch((int) Math.ceil(score)) {
-            case 1:
-                System.out.println("This text should be understood by 5-6 year olds.");
-                break;
-            case 2:
-                System.out.println("This text should be understood by 6-7 year olds.");
-                break;
-            case 3:
-                System.out.println("This text should be understood by 7-9 year olds.");
-                break;
-            case 4:
-                System.out.println("This text should be understood by 9-10 year olds.");
-                break;
-            case 5:
-                System.out.println("This text should be understood by 10-11 year olds.");
-                break;
-            case 6:
-                System.out.println("This text should be understood by 11-12 year olds.");
-                break;
-            case 7:
-                System.out.println("This text should be understood by 12-13 year olds.");
-                break;
-            case 8:
-                System.out.println("This text should be understood by 13-14 year olds.");
-                break;
-            case 9:
-                System.out.println("This text should be understood by 14-15 year olds.");
-                break;    
-            case 10:
-                System.out.println("This text should be understood by 15-16 year olds.");
-                break;
-            case 11:
-                System.out.println("This text should be understood by 16-17 year olds.");
-                break;
-            case 12:
-                System.out.println("This text should be understood by 17-18 year olds.");
-                break;
-            case 13:
-                System.out.println("This text should be understood by 18-24 year olds.");
-                break;
-            default:
-                System.out.println("This text should be understood by 24+ year olds.");
-                break;
+        int age = findAge(score);
+
+        averageAge += age;
+
+        if (age == 25) {
+            System.out.printf("Automated Readability Index: %f (about 24+ year olds).%n", score);
+        } else {
+            System.out.printf("Automated Readability Index: %f (about %d year olds).%n", score, age);
         }
     }
 
@@ -90,7 +111,7 @@ public class Main {
             int vowelCount = 0;
 
             for (int j = 0; j < word.length(); j++) {
-                if (isVowel(word.charAt(j)) && !(j - 1 > 0 && isVowel(word.charAt(j - 1)))) vowelCount++;
+                if (isVowel(word.charAt(j)) && !(j - 1 >= 0 && isVowel(word.charAt(j - 1)))) vowelCount++;
                 if (j == word.length() - 1 && word.charAt(j) == 'e') vowelCount--;
             }
 
@@ -134,7 +155,39 @@ public class Main {
         System.out.println("Characters: " + characterCount);
         System.out.println("Syllables: " + syllableCount);
         System.out.println("Polysyllables: " + polysyllableCount);
+        
+        System.out.print("Enter the score you want to calculate (ARI, FK, SMOG, CL, all): ");
+        String choice = scan.next();
 
-        readabilityIndex();
+        System.out.println();
+
+        double num = 1.0;
+
+        switch (choice) {
+            case "ARI":
+                automatedReadabilityIndex();
+                break;
+            case "FK":
+                fleschKincaidIndex();
+                break;
+            case "SMOG":
+                smogIndex();
+                break;
+            case "CL":
+                colemanLiauIndex();
+                break;
+            case "all":
+                automatedReadabilityIndex();
+                fleschKincaidIndex();
+                smogIndex();
+                colemanLiauIndex();
+                num = 4.0;
+                break;
+            default: 
+                System.out.println("ERROR!");
+                break;
+        }
+
+        System.out.printf("This text should be understood in average by %f year olds.%n", (double) averageAge / num);
     }
 }
